@@ -5,6 +5,7 @@ import { TodoList } from "../components/TodoList";
 
 function Todo() {
   const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState("All")
 
   function addTodo(title) {
     setTodos((currentTodos) => {
@@ -42,11 +43,22 @@ function Todo() {
     });
     setTodos(editedTodo);
   }
+
+  function filterTodo() {
+    switch (filter) {
+      case "Active":
+        return todos.filter((todo) => !todo.completed);
+      case "Completed":
+        return todos.filter((todo) => todo.completed);
+      default:
+        return todos;
+    }
+  }
   
   return (
     <>
-      <TodoForm addTodo={addTodo} />
-      <TodoList todos={todos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} editTodo={editTodo} />
+      <TodoForm addTodo={addTodo} filterTodo={filterTodo} setFilter={setFilter}/>
+      <TodoList todos={filterTodo()} toggleTodo={toggleTodo} deleteTodo={deleteTodo} editTodo={editTodo} />
     </>
   );
 }
